@@ -33,6 +33,7 @@ const storage = multer.diskStorage({
         callback(null, file.originalname)
     }
 })
+
 const upload = multer({storage});
 
 const PORT = process.env.PORT || 6001;
