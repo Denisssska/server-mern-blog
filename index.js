@@ -38,6 +38,6 @@ const upload = multer({storage});
 
 const PORT = process.env.PORT || 6001;
 mongoose.set('strictQuery', false);
-mongoose.connect(process.env.MONGO_URL).then(() => {
+mongoose.connect(process.env.MONGO_DB_URL).then(() => {
     app.listen(PORT, () => console.log(`Server port: ${PORT} successfully`));
 }).catch((e) => console.log(`${e} did not connect`));
