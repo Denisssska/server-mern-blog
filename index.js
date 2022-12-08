@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import bodyParser from "body-parser";
 import cors from 'cors';
 import mongoose from "mongoose";
@@ -8,8 +8,10 @@ import helmet from "helmet";
 import morgan from 'morgan';
 import path from "path";
 import {fileURLToPath} from 'url';
+import * as Controller from './controllers/auth.js'
 
 // configurations
+// @ts-ignore
 const __fileName = fileURLToPath(import.meta.url);
 const __dirName = path.dirname(__fileName);
 dotenv.config();
@@ -18,6 +20,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"}));
 app.use(morgan('common'));
+// @ts-ignore
 app.use(bodyParser.json({limit: '30mb', extended: true}));
 app.use(bodyParser.urlencoded({limit: '30mb', extended: true}));
 app.use(cors());
@@ -36,8 +39,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-const PORT = process.env.PORT || 6001;
+app.post('/auth/register', upload.single("picture"), Controller.register)
+app.get('/', (req, res) => res.send('Hello World!'))
+
+/*routes*/
+
+// app.use('/auth',authRoutes);
+
+
+const PORT = process.env.PORT || 3001;
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGO_DB_URL).then(() => {
-    app.listen(PORT, () => console.log(`Server port: ${PORT} successfully`));
+    app.listen(PORT, () => {
+        console.log(`Server port: ${PORT} successfully`)
+    });
 }).catch((e) => console.log(`${e} did not connect`));
